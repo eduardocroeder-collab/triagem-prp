@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triagem — Estudo PRP Menisco</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-light: #4a4a6a;
+    --cream: #f7f5f0;
+    --white: #ffffff;
+    --accent: #2563a8;
+    --accent-light: #dbeafe;
+    --success: #166534;
+    --success-bg: #dcfce7;
+    --danger: #991b1b;
+    --danger-bg: #fee2e2;
+    --warn: #92400e;
+    --warn-bg: #fef3c7;
+    --border: #d1cfc8;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--white);
+    padding: 36px 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(37,99,168,0.25);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(37,99,168,0.12);
+  }
+  .header-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  header h1 em { font-style: italic; color: #93c5fd; }
+  header p.subtitle {
+    font-size: 13px;
+    color: #c7d2fe;
+    font-weight: 300;
+    max-width: 540px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    color: #e0e7ff;
+    font-weight: 500;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* NOTICE BOX */
+  .notice {
+    margin: 24px 24px 0;
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #1e3a5f;
+    line-height: 1.6;
+  }
+  .notice strong { display: block; margin-bottom: 3px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* MAIN */
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  /* SECTION */
+  .section {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 18px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+  .section:nth-child(2) { animation-delay:.05s }
+  .section:nth-child(3) { animation-delay:.1s }
+  .section:nth-child(4) { animation-delay:.15s }
+  .section:nth-child(5) { animation-delay:.2s }
+  .section:nth-child(6) { animation-delay:.25s }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 17px; }
+  .section-num { font-size: 10px; color: var(--ink-light); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+
+  /* FORM ELEMENTS */
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  label .req { color: var(--accent); }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--cream);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select { cursor: pointer; }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media(max-width:500px) { .row-2,.row-3 { grid-template-columns: 1fr; } }
+
+  /* RADIO / CHECK GROUPS */
+  .radio-group, .check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .radio-group label, .check-group label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    text-transform: none;
+    letter-spacing: 0;
+    background: var(--cream);
+    transition: all .15s;
+  }
+  .radio-group input, .check-group input { display: none; }
+  .radio-group label:has(input:checked),
+  .check-group label:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  /* EXCLUSION CHECKLIST */
+  .excl-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media(max-width:500px) { .excl-grid { grid-template-columns: 1fr; } }
+  .excl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--cream);
+    transition: all .15s;
+  }
+  .excl-item input[type="checkbox"] { display: none; }
+  .excl-item .chk-box {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    background: #fff;
+  }
+  .excl-item:has(input:checked) {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+  }
+  .excl-item:has(input:checked) .chk-box {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  .excl-item:has(input:checked) .chk-box::after {
+    content: '✓';
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .excl-text { font-size: 12.5px; line-height: 1.45; color: var(--ink); }
+
+  /* EXCLUSION ALERT */
+  #excl-alert {
+    display: none;
+    margin-top: 14px;
+    background: var(--danger-bg);
+    border: 1.5px solid #fca5a5;
+    border-radius: 9px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--danger);
+    font-weight: 500;
+  }
+
+  /* ELIGIBILITY RESULT */
+  #eligibility-result {
+    display: none;
+    margin-top: 14px;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .eligible { background: var(--success-bg); color: var(--success); border: 1.5px solid #86efac; }
+  .ineligible { background: var(--danger-bg); color: var(--danger); border: 1.5px solid #fca5a5; }
+  .pending { background: var(--warn-bg); color: var(--warn); border: 1.5px solid #fcd34d; }
+
+  /* HINT */
+  .hint {
+    font-size: 11.5px;
+    color: var(--ink-light);
+    margin-top: 5px;
+    font-weight: 400;
+  }
+
+  /* DIVIDER */
+  .field-divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 18px 0;
+  }
+
+  /* SUBMIT */
+  .submit-wrap { text-align: center; padding-top: 10px; }
+  button[type="submit"] {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 15px 48px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    letter-spacing: 0.2px;
+  }
+  button[type="submit"]:hover { background: #1d4ed8; transform: translateY(-1px); }
+  .submit-note {
+    font-size: 11.5px;
+    color: var(--ink-light);
+    margin-top: 10px;
+  }
+
+  /* SUCCESS */
+  #success-msg {
+    display: none;
+    background: var(--success-bg);
+    border: 1.5px solid #86efac;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    color: var(--success);
+    margin-top: 20px;
+  }
+  #success-msg h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 6px; }
+  #success-msg p { font-size: 13px; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11.5px;
+    color: var(--ink-light);
+    border-top: 1px solid var(--border);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    height: 4px;
+    margin-top: 18px;
+    overflow: hidden;
+    max-width: 300px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #93c5fd;
+    border-radius: 4px;
+    width: 0%;
+    transition: width .3s;
+  }
+  .progress-label { font-size: 11px; color: #93c5fd; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="header-tag">HUCFF · Pesquisa Clínica · Ortopedia</span>
+  <h1>Estudo PRP no Menisco<br><em>Formulário de Triagem</em></h1>
+  <p class="subtitle">Comparação entre PRP intra-articular e intra-meniscal em lesões degenerativas — Responda com sinceridade para verificar sua elegibilidade.</p>
+  <div class="header-badge"><span class="dot"></span> Captação de Pacientes em Andamento</div>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="progress-label" id="progress-label">Preencha o formulário abaixo</div>
+</header>
+
+<div class="notice">
+  <strong>📋 Sobre este formulário</strong>
+  Este formulário é uma <strong>pré-triagem</strong>. Após o envio, nossa equipe entrará em contato para confirmar a elegibilidade e agendar uma consulta no HUCFF. Todos os dados são confidenciais.
+</div>
+
+<main>
+<form id="screening-form" onsubmit="handleSubmit(event)" novalidate>
+
+  <!-- BLOCO 1: IDENTIFICAÇÃO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <div class="section-num">Bloco 1 de 6</div>
+        <div class="section-title">Identificação</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Nome completo <span class="req">*</span></label>
+      <input type="text" name="nome" placeholder="Como prefere ser chamado(a)" required>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Data de nascimento <span class="req">*</span></label>
+        <input type="text" name="dob" placeholder="DD/MM/AAAA" maxlength="10" id="dob-input" required>
+        <div class="hint" id="age-hint"></div>
+      </div>
+      <div class="field">
+        <label>Sexo biológico <span class="req">*</span></label>
+        <select name="sexo" required>
+          <option value="">Selecione</option>
+          <option>Masculino</option>
+          <option>Feminino</option>
+        </select>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Telefone / WhatsApp <span class="req">*</span></label>
+        <input type="tel" name="tel" placeholder="(21) 99999-9999" required>
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" name="email" placeholder="opcional">
+      </div>
+    </div>
+    <div class="field">
+      <label>Bairro / Cidade de residência <span class="req">*</span></label>
+      <input type="text" name="cidade" placeholder="Ex.: Tijuca, Rio de Janeiro" required>
+    </div>
+    <div class="field">
+      <label>Como ficou sabendo do estudo? <span class="req">*</span></label>
+      <select name="origem" required>
+        <option value="">Selecione</option>
+        <option>Grupo de WhatsApp</option>
+        <option>Indicação médica</option>
+        <option>Redes sociais (Instagram, Facebook)</option>
+        <option>Amigo / familiar</option>
+        <option>Outra mídia</option>
+        <option>Outro</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- BLOCO 2: CRITÉRIOS DE INCLUSÃO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div>
+        <div class="section-num">Bloco 2 de 6</div>
+        <div class="section-title">Critérios de Inclusão</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Você tem 40 anos ou mais? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="idade_ok" value="sim" required onchange="checkEligibility()"> Sim</label>
+        <label><input type="radio" name="idade_ok" value="nao" onchange="checkEligibility()"> Não</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Possui diagnóstico de lesão do menisco confirmado por ressonância magnética? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="rm_ok" value="sim" required onchange="checkEligibility()"> Sim, tenho laudo</label>
+        <label><input type="radio" name="rm_ok" value="nao" onchange="checkEligibility()"> Ainda não fiz</label>
+        <label><input type="radio" name="rm_ok" value="fiz_sem_laudo" onchange="checkEligibility()"> Fiz mas não tenho laudo</label>
+      </div>
+      <div class="hint">⚠️ Para participar, a RM com laudo confirmando a lesão é obrigatória antes do procedimento.</div>
+    </div>
+
+    <div class="field">
+      <label>Qual joelho(s) está(ão) acometido(s)? <span class="req">*</span></label>
+      <div class="check-group">
+        <label><input type="checkbox" name="joelho" value="direito"> Direito</label>
+        <label><input type="checkbox" name="joelho" value="esquerdo"> Esquerdo</label>
+        <label><input type="checkbox" name="joelho" value="ambos"> Ambos</label>
+      </div>
+      <div class="hint">💡 Pacientes com lesão bilateral são especialmente bem-vindos ao estudo!</div>
+    </div>
+
+    <div class="field">
+      <label>Você possui radiografia do joelho acometido? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="rx_ok" value="sim"> Sim</label>
+        <label><input type="radio" name="rx_ok" value="nao"> Não</label>
+      </div>
+      <div class="hint">A radiografia é necessária para avaliação do grau de artrose (Kellgreen-Lawrence).</div>
+    </div>
+
+    <div class="field">
+      <label>Você sente dor no joelho? Descreva brevemente o sintoma principal. <span class="req">*</span></label>
+      <textarea name="sintoma" placeholder="Ex.: Dor ao subir escadas há 6 meses, piora com atividade física..." required></textarea>
+    </div>
+
+    <div class="field">
+      <label>Há quanto tempo apresenta os sintomas? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="tempo_sintoma" value="<3m" required> Menos de 3 meses</label>
+        <label><input type="radio" name="tempo_sintoma" value="3-6m"> 3 a 6 meses</label>
+        <label><input type="radio" name="tempo_sintoma" value="6-12m"> 6 a 12 meses</label>
+        <label><input type="radio" name="tempo_sintoma" value=">12m"> Mais de 1 ano</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCO 3: CRITÉRIOS ANTROPOMÉTRICOS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <div>
+        <div class="section-num">Bloco 3 de 6</div>
+        <div class="section-title">Medidas Antropométricas</div>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Peso atual (kg) <span class="req">*</span></label>
+        <input type="number" name="peso" placeholder="Ex.: 78" min="30" max="250" step="0.1" required onchange="calcIMC()">
+      </div>
+      <div class="field">
+        <label>Altura (cm) <span class="req">*</span></label>
+        <input type="number" name="altura" placeholder="Ex.: 170" min="100" max="230" required onchange="calcIMC()">
+      </div>
+    </div>
+    <div id="imc-result" class="hint" style="font-size:13px; padding:10px 14px; border-radius:8px; display:none;"></div>
+  </div>
+
+  <!-- BLOCO 4: CRITÉRIOS DE EXCLUSÃO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🚫</div>
+      <div>
+        <div class="section-num">Bloco 4 de 6</div>
+        <div class="section-title">Fatores de Exclusão</div>
+      </div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-light); margin-bottom:16px;">Marque <strong>todos</strong> os itens que se aplicam a você. Cada item marcado poderá impossibilitar a participação — mas nossa equipe avaliará caso a caso.</p>
+
+    <div class="excl-grid" id="excl-grid">
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="trauma">
+        <span class="chk-box"></span>
+        <span class="excl-text">História de lesão <strong>traumática</strong> do menisco (entorse, torção, queda)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="ligamento">
+        <span class="chk-box"></span>
+        <span class="excl-text">Lesão ligamentar associada no joelho (LCA, LCP, LCM, LCL)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="gonartrose">
+        <span class="chk-box"></span>
+        <span class="excl-text">Artrose do joelho grau <strong>moderado ou avançado</strong> (grau 3 ou 4 na radiografia)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="diabetes">
+        <span class="chk-box"></span>
+        <span class="excl-text">Diabetes <strong>não controlado</strong> (glicose ≥125 ou HbA1c ≥6,4%)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="dislipidemia">
+        <span class="chk-box"></span>
+        <span class="excl-text">Dislipidemia não controlada (Col-T >200, LDL >100, HDL <40 ou TAG >200)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="inflamatoria">
+        <span class="chk-box"></span>
+        <span class="excl-text">Doença inflamatória sistêmica (artrite reumatoide, lúpus, artrite psoriática etc.)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="infeccao">
+        <span class="chk-box"></span>
+        <span class="excl-text">Infecção ativa em qualquer local do corpo</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="imuno">
+        <span class="chk-box"></span>
+        <span class="excl-text">Imunodepressão (HIV, uso de imunossupressores, quimioterapia)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="neoplasia">
+        <span class="chk-box"></span>
+        <span class="excl-text">Câncer em atividade (diagnóstico recente ou em tratamento)</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="corticoide">
+        <span class="chk-box"></span>
+        <span class="excl-text">Uso contínuo de corticóides ou imunobiológicos</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="aines">
+        <span class="chk-box"></span>
+        <span class="excl-text">Uso de anti-inflamatórios (ibuprofeno, diclofenaco, naproxeno) nos últimos 5 dias</span>
+      </label>
+      <label class="excl-item" onclick="checkExcl()">
+        <input type="checkbox" name="excl" value="nenhum">
+        <span class="chk-box"></span>
+        <span class="excl-text" style="color:var(--success); font-weight:600;">✓ Nenhum dos itens acima se aplica a mim</span>
+      </label>
+    </div>
+
+    <div id="excl-alert">
+      ⚠️ Um ou mais critérios marcados podem impossibilitar a participação. Nossa equipe entrará em contato para avaliação individual.
+    </div>
+  </div>
+
+  <!-- BLOCO 5: HISTÓRICO E DISPONIBILIDADE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📅</div>
+      <div>
+        <div class="section-num">Bloco 5 de 6</div>
+        <div class="section-title">Histórico Clínico e Disponibilidade</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Já realizou algum tratamento para o joelho? <span class="req">*</span></label>
+      <div class="check-group">
+        <label><input type="checkbox" name="trat" value="fisio"> Fisioterapia</label>
+        <label><input type="checkbox" name="trat" value="infiltracao"> Infiltração (ácido hialurônico, corticoide)</label>
+        <label><input type="checkbox" name="trat" value="cirurgia"> Cirurgia no joelho</label>
+        <label><input type="checkbox" name="trat" value="prp_prev"> PRP anteriormente</label>
+        <label><input type="checkbox" name="trat" value="nenhum"> Nenhum</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Usa algum medicamento de uso contínuo? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="medicamentos" value="nao" required> Não</label>
+        <label><input type="radio" name="medicamentos" value="sim"> Sim</label>
+      </div>
+    </div>
+    <div class="field" id="medicamentos-detail" style="display:none;">
+      <label>Quais medicamentos?</label>
+      <input type="text" name="medicamentos_desc" placeholder="Ex.: losartana 50mg, metformina 850mg">
+    </div>
+
+    <hr class="field-divider">
+
+    <div class="field">
+      <label>Você consegue comparecer ao HUCFF (Ilha do Fundão, RJ) para as consultas? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label><input type="radio" name="disponivel" value="sim" required onchange="checkEligibility()"> Sim, consigo</label>
+        <label><input type="radio" name="disponivel" value="nao" onchange="checkEligibility()"> Tenho dificuldades</label>
+      </div>
+      <div class="hint">O acompanhamento inclui visitas ao 1º, 3º e 6º mês após o procedimento.</div>
+    </div>
+
+  </div>
+
+  <!-- BLOCO 6: OBSERVAÇÕES E CONSENTIMENTO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📝</div>
+      <div>
+        <div class="section-num">Bloco 6 de 6</div>
+        <div class="section-title">Observações e Autorização</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Há alguma informação adicional que queira nos contar?</label>
+      <textarea name="obs" placeholder="Dúvidas, histórico relevante, condições não mencionadas acima..."></textarea>
+    </div>
+
+    <hr class="field-divider">
+
+    <div class="field">
+      <label style="text-transform:none; font-size:13px; font-weight:400; color:var(--ink); line-height:1.7;">
+        <input type="checkbox" name="consentimento" id="chk-consent" required style="width:auto; display:inline; margin-right:8px;" onchange="checkEligibility()">
+        Declaro que as informações fornecidas são verdadeiras e que, em caso de elegibilidade, estou ciente de que assinarei um <strong>Termo de Consentimento Livre e Esclarecido (TCLE)</strong> antes de qualquer procedimento, com explicação completa dos riscos e benefícios.
+      </label>
+    </div>
+
+    <div id="eligibility-result"></div>
+
+    <div class="submit-wrap">
+      <button type="submit">Enviar pré-triagem →</button>
+      <p class="submit-note">Nossa equipe retornará em até 3 dias úteis pelo WhatsApp ou e-mail informado.</p>
+    </div>
+  </div>
+
+</form>
+
+<div id="success-msg">
+  <h3>✅ Formulário enviado com sucesso!</h3>
+  <p>Obrigado pelo interesse! Nossa equipe de pesquisa entrará em contato em até <strong>3 dias úteis</strong> pelo WhatsApp ou e-mail informado para orientações sobre os próximos passos.</p>
+  <p style="margin-top:10px; font-size:12px; color:#15803d;">HUCFF · Hospital Universitário Clementino Fraga Filho · Pesquisa Clínica</p>
+</div>
+</main>
+
+<footer>
+  HUCFF — Hospital Universitário Clementino Fraga Filho · Estudo clínico em andamento · Dados coletados exclusivamente para fins de pesquisa
+</footer>
+
+<script>
+// Progress bar
+const fields = document.querySelectorAll('input,select,textarea');
+fields.forEach(f => f.addEventListener('change', updateProgress));
+fields.forEach(f => f.addEventListener('input', updateProgress));
+
+function updateProgress() {
+  const required = document.querySelectorAll('[required]');
+  let filled = 0;
+  required.forEach(f => {
+    if (f.type === 'radio') {
+      const group = document.querySelectorAll(`[name="${f.name}"]:checked`);
+      if (group.length) filled++;
+    } else if (f.type === 'checkbox') {
+      if (f.checked) filled++;
+    } else if (f.value.trim()) filled++;
+  });
+  const pct = Math.min(100, Math.round((filled / required.length) * 100));
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = pct + '% preenchido';
+}
+
+// Age from DOB
+document.getElementById('dob-input').addEventListener('input', function() {
+  const val = this.value;
+  const match = val.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (match) {
+    const bd = new Date(+match[3], +match[2]-1, +match[1]);
+    const age = Math.floor((new Date() - bd) / (365.25 * 86400000));
+    const hint = document.getElementById('age-hint');
+    if (age >= 40) {
+      hint.textContent = `✅ Idade: ${age} anos — dentro do critério de inclusão`;
+      hint.style.color = '#166534';
+    } else if (age > 0) {
+      hint.textContent = `⚠️ Idade: ${age} anos — abaixo dos 40 anos exigidos`;
+      hint.style.color = '#991b1b';
+    }
+    // auto-fill radio
+    const radios = document.querySelectorAll('[name="idade_ok"]');
+    radios.forEach(r => { r.checked = (r.value === (age >= 40 ? 'sim' : 'nao')); });
+    checkEligibility();
+  }
+});
+
+// IMC
+function calcIMC() {
+  const peso = parseFloat(document.querySelector('[name="peso"]').value);
+  const alt = parseFloat(document.querySelector('[name="altura"]').value);
+  if (!peso || !alt) return;
+  const imc = peso / Math.pow(alt/100, 2);
+  const el = document.getElementById('imc-result');
+  el.style.display = 'block';
+  if (imc >= 35) {
+    el.textContent = `IMC calculado: ${imc.toFixed(1)} kg/m² — ⚠️ Acima do limite permitido (≥35). Pode impossibilitar a participação.`;
+    el.style.background = '#fee2e2'; el.style.color = '#991b1b';
+  } else {
+    el.textContent = `IMC calculado: ${imc.toFixed(1)} kg/m² — ✅ Dentro do critério aceito (<35)`;
+    el.style.background = '#dcfce7'; el.style.color = '#166534';
+  }
+  checkEligibility();
+}
+
+// Medication detail
+document.querySelectorAll('[name="medicamentos"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('medicamentos-detail').style.display = r.value === 'sim' ? 'block' : 'none';
+  });
+});
+
+// Exclusion checklist
+function checkExcl() {
+  setTimeout(() => {
+    const checked = [...document.querySelectorAll('[name="excl"]:checked')].map(c => c.value).filter(v => v !== 'nenhum');
+    const alert = document.getElementById('excl-alert');
+    alert.style.display = checked.length > 0 ? 'block' : 'none';
+    checkEligibility();
+  }, 50);
+}
+
+// Eligibility check
+function checkEligibility() {
+  const result = document.getElementById('eligibility-result');
+  const idadeOk = document.querySelector('[name="idade_ok"]:checked')?.value;
+  const rmOk = document.querySelector('[name="rm_ok"]:checked')?.value;
+  const dispOk = document.querySelector('[name="disponivel"]:checked')?.value;
+  const consent = document.getElementById('chk-consent').checked;
+  const exclChecked = [...document.querySelectorAll('[name="excl"]:checked')].map(c => c.value).filter(v => v !== 'nenhum');
+  const peso = parseFloat(document.querySelector('[name="peso"]').value);
+  const alt = parseFloat(document.querySelector('[name="altura"]').value);
+  const imc = (peso && alt) ? peso / Math.pow(alt/100, 2) : null;
+
+  if (!idadeOk || !rmOk) {
+    result.style.display = 'none';
+    return;
+  }
+
+  result.style.display = 'block';
+
+  if (idadeOk === 'nao') {
+    result.className = 'ineligible';
+    result.innerHTML = '❌ Inelegível: Você precisa ter 40 anos ou mais para participar.';
+    return;
+  }
+  if (imc && imc >= 35) {
+    result.className = 'ineligible';
+    result.innerHTML = '❌ Inelegível: IMC ≥35 é critério de exclusão.';
+    return;
+  }
+  if (exclChecked.length > 0) {
+    result.className = 'pending';
+    result.innerHTML = '⚠️ Possível restrição: Um ou mais fatores de exclusão foram marcados. Nossa equipe avaliará individualmente.';
+    return;
+  }
+  if (rmOk === 'nao') {
+    result.className = 'pending';
+    result.innerHTML = '⚠️ Pendência: A ressonância magnética com laudo é obrigatória. Podemos orientar você sobre como obtê-la antes da consulta.';
+    return;
+  }
+  if (dispOk === 'nao') {
+    result.className = 'pending';
+    result.innerHTML = '⚠️ Verifique disponibilidade: O protocolo exige visitas presenciais ao HUCFF. Entre em contato para conversarmos sobre alternativas.';
+    return;
+  }
+  if (consent && idadeOk === 'sim' && (rmOk === 'sim' || rmOk === 'fiz_sem_laudo') && dispOk === 'sim') {
+    result.className = 'eligible';
+    result.innerHTML = '✅ Aparentemente elegível! Envie o formulário — nossa equipe confirmará e agendará sua consulta no HUCFF.';
+    return;
+  }
+  result.style.display = 'none';
+}
+
+// Submit
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDf2_PUQ4IQiMy3De-mmY4yIYdOMBweFALAsU7C7QhKeeR8ju_PuowWVY-Y7kkF8XPyw/exec";
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const consent = document.getElementById('chk-consent');
+  if (!consent.checked) {
+    alert('Por favor, leia e aceite o termo de consentimento antes de enviar.');
+    return;
+  }
+
+  const form = document.getElementById('screening-form');
+  const fd = new FormData(form);
+  const data = {};
+  fd.forEach((val, key) => {
+    if (data[key]) {
+      data[key] = Array.isArray(data[key]) ? [...data[key], val] : [data[key], val];
+    } else {
+      data[key] = val;
+    }
+  });
+  Object.keys(data).forEach(k => {
+    if (Array.isArray(data[k])) data[k] = data[k].join(", ");
+  });
+
+  const btn = form.querySelector('button[type="submit"]');
+  try {
+    btn.textContent = "Enviando...";
+    btn.disabled = true;
+
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    form.style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    alert("Erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp.");
+    btn.textContent = "Enviar pré-triagem →";
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
